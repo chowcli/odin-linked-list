@@ -7,28 +7,6 @@ class LinkedList {
     this.size = 0;
   }
 
-  // Adds a new node containing value to the end of the list
-  append(value) {
-    if (this.head === null) this.head = this.tail = Node(value);
-    else {
-      this.tail = this.tail.next = Node(value);
-    }
-
-    this.size += 1;
-  }
-
-  // Adds a new node containing value to the start of the list
-  prepend(value) {
-    if (this.head === null) {
-      this.head = this.tail = Node(value);
-      this.size += 1;
-    } else {
-      this.head = Node(value, this.head);
-      this.size += 1;
-      // tail in this case will always be the last node so don't have to update
-    }
-  }
-
   getSize() {
     return this.size;
   }
@@ -41,9 +19,28 @@ class LinkedList {
     return this.tail;
   }
 
+  // Adds a new node containing value to the end of the list
+  append(value) {
+    if (this.head === null) this.head = this.tail = Node(value);
+    else {
+      this.tail = this.tail.next = Node(value);
+    }
+
+    this.size += 1;
+  }
+
+  // Adds a new node containing value to the start of the list
+  prepend(value) {
+    this.head = Node(value, this.head);
+    this.size += 1;
+
+    if (this.size === 1) {
+      this.tail = this.head; // 1 node scenario
+    }
+  }
+
   // Returns the node at the given index
   at(index) {
-    // starting at index 1
     if (index <= 0 || index > this.size) {
       return null;
     }
@@ -53,7 +50,7 @@ class LinkedList {
       // if index is 1 it will not enter the loop
       temp = temp.next;
     }
-    return temp; // return node at the given index
+    return temp;
   }
 
   // Removes the last element from the list
@@ -62,17 +59,15 @@ class LinkedList {
 
     if (this.size === 1) {
       this.head = this.tail = null;
-      this.size = 0;
-      return;
+    } else {
+      let temp = this.head;
+      while (temp.next.next) {
+        // if there are only 2 node (left), it will not enter the loop
+        temp = temp.next;
+      }
+      temp.next = null;
+      this.tail = temp;
     }
-
-    let temp = this.head;
-    while (temp.next.next) {
-      // if there are only 2 node (left), it will not enter the loop
-      temp = temp.next;
-    }
-    temp.next = null;
-    this.tail = temp;
     this.size -= 1;
   }
 
