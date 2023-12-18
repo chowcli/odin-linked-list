@@ -9,32 +9,21 @@ class LinkedList {
 
   // Adds a new node containing value to the end of the list
   append(value) {
-    if (this.head === null) {
-      this.head = Node(value);
-      this.tail = this.head;
-      this.size += 1;
-    } else {
-      let temp = this.head;
-      while (temp.next) {
-        temp = temp.next;
-      }
-
-      temp.next = Node(value);
-      this.tail = temp.next;
-      this.size += 1;
+    if (this.head === null) this.head = this.tail = Node(value);
+    else {
+      this.tail = this.tail.next = Node(value);
     }
+
+    this.size += 1;
   }
 
   // Adds a new node containing value to the start of the list
   prepend(value) {
     if (this.head === null) {
-      this.head = Node(value);
-      this.tail = this.head;
+      this.head = this.tail = Node(value);
       this.size += 1;
     } else {
-      let temp = this.head;
-      this.head = Node(value);
-      this.head.next = temp;
+      this.head = Node(value, this.head);
       this.size += 1;
       // tail in this case will always be the last node so don't have to update
     }
@@ -69,13 +58,10 @@ class LinkedList {
 
   // Removes the last element from the list
   pop() {
-    if (this.head === null) {
-      return;
-    }
+    if (this.head === null) return;
 
     if (this.size === 1) {
-      this.head = null;
-      this.tail = null;
+      this.head = this.tail = null;
       this.size = 0;
       return;
     }
@@ -120,21 +106,60 @@ class LinkedList {
   // Represents your LinkedList objects as strings,
   // so you can print them out and preview them in the console
   toString() {
-    if (this.head === null) {
-      return "null";
-    }
+    if (this.head === null) return "null";
 
     let linkedList = "";
     let temp = this.head;
-
     while (temp) {
       linkedList += `( ${temp.value} ) -> `;
       temp = temp.next;
     }
 
-    linkedList += "null";
+    return (linkedList += "null");
+  }
 
-    return linkedList;
+  // inserts a new node with the provided value at the given index
+  insertAt(value, index) {
+    if (index <= 0) return;
+
+    if (index > this.size) {
+      this.append(value);
+      return;
+    }
+
+    if (index === 1) this.head = Node(value, this.head);
+    else {
+      let temp = this.head;
+      for (let i = 1; i < index - 1; i++) {
+        temp = temp.next;
+      }
+      temp.next = Node(value, temp.next);
+    }
+
+    this.size += 1;
+  }
+
+  // Removes the node at the given index
+  removeAt(index) {
+    if (index <= 0 || index > this.size) {
+      return console.log("Index out of list range");
+    }
+    if (this.head === null) return console.log("No node left");
+
+    if (index === 1) {
+      this.head = this.head.next;
+      this.size -= 1;
+      return;
+    }
+
+    let temp = this.head;
+    for (let i = 1; i < index - 1; i++) {
+      temp = temp.next;
+    }
+
+    temp.next = temp.next.next;
+    this.size -= 1;
+    this.tail = temp;
   }
 }
 

@@ -1,7 +1,7 @@
-const Node = data => {
+const Node = (data, nextNode = null) => {
   return {
     value: data,
-    next: null,
+    next: nextNode
   };
 };
 
