@@ -122,28 +122,8 @@ class LinkedList {
       return;
     }
 
-    if (index === 1) this.head = Node(value, this.head);
-    else {
-      let temp = this.head;
-      for (let i = 1; i < index - 1; i++) {
-        temp = temp.next;
-      }
-      temp.next = Node(value, temp.next);
-    }
-
-    this.size += 1;
-  }
-
-  // Removes the node at the given index
-  removeAt(index) {
-    if (index <= 0 || index > this.size) {
-      return console.log("Index out of list range");
-    }
-    if (this.head === null) return console.log("No node left");
-
     if (index === 1) {
-      this.head = this.head.next;
-      this.size -= 1;
+      this.prepend(value);
       return;
     }
 
@@ -152,9 +132,36 @@ class LinkedList {
       temp = temp.next;
     }
 
+    temp.next = Node(value, temp.next);
+
+    this.size += 1;
+  }
+
+  // Removes the node at the given index
+  removeAt(index) {
+    if (this.head === null) return console.log("No node left");
+
+    if (index <= 0 || index > this.size) return console.log("Index out of list range");
+
+    if (index === 1) {
+      this.head = this.head.next;
+      this.size -= 1;
+
+      if (this.size === 0) this.tail = null;
+
+      return;
+    }
+
+    // node to be remove may start from 2nd to last node
+    let temp = this.head;
+    for (let i = 1; i < index - 1; i++) {
+      temp = temp.next;
+    }
+
+    // remove specific node by skipping it
     temp.next = temp.next.next;
+    if (index === this.size) this.tail = temp; // if remove last node set tail to 2nd-to-last node
     this.size -= 1;
-    this.tail = temp;
   }
 }
 
